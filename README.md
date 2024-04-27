@@ -38,8 +38,8 @@ GAMESCOPECMD="gamescope -e -f"
 # In this case, the remaining arguments are also set automatically.
 GAMESCOPECMD_BASE="/usr/bin/gamescope"
 
-#Define this if you want composer to run with this option
-ENABLE_GAMESCOPE_WSI=1
+#Define this if you want composer to run without this option
+ENABLE_GAMESCOPE_WSI=0
 
 #If desired, define an additional command that must be executed before starting the gamescope
 BEFORE_GAMESCOPE_SESSION_PLUS="/bin/turn_on_tv.sh"
