@@ -153,6 +153,7 @@ if [ -z "$GAMESCOPECMD" ]; then
 	: "${TOUCH_MODE:=4}"
 	: "${HIDE_CURSOR_DELAY_MS:=3000}"
 	: "${FADE_OUT_DURATION_MS:=200}"
+	: "${GAMESCOPECMD_BASE:=/usr/bin/gamescope}"
 
 	CURSOR=""
 	if [ -f "$CURSOR_FILE" ]; then
@@ -199,10 +200,6 @@ if [ -z "$GAMESCOPECMD" ]; then
 	if [ -n "$CUSTOM_REFRESH_RATES" ] && gamescope_has_option "--custom-refresh-rates"; then
 		CUSTOM_REFRESH_RATES_OPTION="--custom-refresh-rates $CUSTOM_REFRESH_RATES"
 	fi
-
-  if [ -z "$GAMESCOPECMD_BASE" ] ; then
-      GAMESCOPECMD_BASE="/usr/bin/gamescope"
-  fi
 
 	GAMESCOPECMD="${GAMESCOPECMD_BASE} \
 		$CURSOR \
