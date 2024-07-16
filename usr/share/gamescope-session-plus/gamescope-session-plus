@@ -16,7 +16,7 @@ post_gamescope_start() {
 }
 
 gamescope_has_option() {
-	if (gamescope --help 2>&1 | grep -e "$1" > /dev/null); then
+	if ($GAMESCOPECMD_BASE --help 2>&1 | grep -e "$1" > /dev/null); then
 		return 0
 	fi
 
@@ -114,6 +114,8 @@ for i in "${HOME}"/.config/environment.d/*.conf; do
 done
 set +a
 
+: "${GAMESCOPECMD_BASE:=/usr/bin/gamescope}"
+
 if [[ -n ${BEFORE_GAMESCOPE_SESSION_PLUS+x} ]]; then
   $BEFORE_GAMESCOPE_SESSION_PLUS
 fi
@@ -153,7 +155,6 @@ if [ -z "$GAMESCOPECMD" ]; then
 	: "${TOUCH_MODE:=4}"
 	: "${HIDE_CURSOR_DELAY_MS:=3000}"
 	: "${FADE_OUT_DURATION_MS:=200}"
-	: "${GAMESCOPECMD_BASE:=/usr/bin/gamescope}"
 
 	CURSOR=""
 	if [ -f "$CURSOR_FILE" ]; then
@@ -201,6 +202,17 @@ if [ -z "$GAMESCOPECMD" ]; then
 		CUSTOM_REFRESH_RATES_OPTION="--custom-refresh-rates $CUSTOM_REFRESH_RATES"
 	fi
 
+  HDR_OPTIONS=""
+  if [ "$ENABLE_GAMESCOPE_HDR" == "1" ] && gamescope_has_option "--hdr-enabled" && gamescope_has_option "--hdr-itm-enable"; then
+    HDR_OPTIONS="--hdr-enabled --hdr-itm-enable"
+    export ENABLE_HDR_WSI=1
+    export DXVK_HDR=1
+  fi
+
+  if [ -n "$GAMESCOPE_HDR_NITS" ] && gamescope_has_option "--hdr-itm-sdr-nits" && gamescope_has_option "--hdr-sdr-content-nits"; then
+    HDR_OPTIONS="$HDR_OPTIONS --hdr-itm-sdr-nits $GAMESCOPE_HDR_NITS --hdr-sdr-content-nits $GAMESCOPE_HDR_NITS"
+  fi
+
 	GAMESCOPECMD="${GAMESCOPECMD_BASE} \
 		$CURSOR \
 		$RESOLUTION \
@@ -211,11 +223,13 @@ if [ -z "$GAMESCOPECMD" ]; then
 		$ADAPTIVE_SYNC_OPTION \
 		$PANEL_TYPE_OPTION \
 		$CUSTOM_REFRESH_RATES_OPTION \
+		$HDR_OPTIONS \
 		--prefer-output $OUTPUT_CONNECTOR \
 		--xwayland-count $XWAYLAND_COUNT \
 		--default-touch-mode $TOUCH_MODE \
 		--hide-cursor-delay $HIDE_CURSOR_DELAY_MS \
 		--fade-out-duration $FADE_OUT_DURATION_MS \
+		--fullscreen \
 		--steam"
 fi
 

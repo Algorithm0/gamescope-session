@@ -38,16 +38,16 @@ GAMESCOPECMD="gamescope -e -f"
 # In this case, the remaining arguments are also set automatically.
 GAMESCOPECMD_BASE="/usr/bin/gamescope"
 
-#Define this if you want composer to run with this option
-ENABLE_GAMESCOPE_WSI=1
+# Specify if you want to enable support for HDR content
+ENABLE_GAMESCOPE_HDR=1
+# Set the target luminace of the inverse tone mapping process (option)
+GAMESCOPE_HDR_NITS=400
 
-#If desired, define an additional command that must be executed before starting the gamescope
+# If desired, define an additional command that must be executed before starting the gamescope
 BEFORE_GAMESCOPE_SESSION_PLUS="/bin/turn_on_tv.sh"
-
-#If desired, define an additional command that will be executed after the session ends
+# If desired, define an additional command that will be executed after the session ends
 AFTER_GAMESCOPE_SESSION_PLUS="/bin/turn_off_tv.sh"
-
-#Run the task just before starting the client
+# Run the task just before starting the client
 BEFORE_GAMESCOPE_CLIENT="/bin/bluetooth-audio-connect.sh"
 ```
 
