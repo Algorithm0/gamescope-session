@@ -12,14 +12,25 @@ short_session_recover() {
 	:
 }
 
-# default empty function to run after gamescope is started
-post_gamescope_start() {
-	:
+# function to run before gamescope is started
+pre_gamescope_start() {
+	if [[ -n ${BEFORE_GAMESCOPE_SESSION_PLUS+x} ]]; then
+    eval " $BEFORE_GAMESCOPE_SESSION_PLUS"
+  fi
 }
 
-# default empty function to run after client exits
+# function to run after gamescope is started
+post_gamescope_start() {
+	if [[ -n ${BEFORE_GAMESCOPE_CLIENT+x} ]]; then
+    eval " $BEFORE_GAMESCOPE_CLIENT"
+  fi
+}
+
+# function to run after client exits
 post_client_shutdown() {
-	:
+	if [[ -n ${AFTER_GAMESCOPE_SESSION_PLUS+x} ]]; then
+    eval " ${AFTER_GAMESCOPE_SESSION_PLUS}"
+  fi
 }
 
 get_gamescope_binary() {
@@ -292,6 +303,9 @@ fi
 if [ -f "${HOME}"/.gamescope-cmd.log ]; then
 	cp "${HOME}"/.gamescope-cmd.log "${HOME}"/.gamescope-cmd.log.old
 fi
+
+# Run pre-session defined hook
+pre_gamescope_start
 
 # Start gamescope compositor, log it's output and background it
 echo $GAMESCOPECMD >"${HOME}"/.gamescope-cmd.log

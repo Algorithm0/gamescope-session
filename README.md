@@ -57,6 +57,13 @@ ENABLE_GAMESCOPE_HDR=1
 # Set the target luminace of the inverse tone mapping process (option)
 GAMESCOPE_HDR_NITS=400
 
+# If desired, define an additional command that must be executed before starting the gamescope
+BEFORE_GAMESCOPE_SESSION_PLUS="/bin/turn_on_tv.sh"
+# If desired, define an additional command that will be executed after the session ends
+AFTER_GAMESCOPE_SESSION_PLUS="/bin/turn_off_tv.sh"
+# Run the task just before starting the client
+BEFORE_GAMESCOPE_CLIENT="/bin/bluetooth-audio-connect.sh"
+
 # Override entire client command line
 CLIENTCMD="steam -steamos -pipewire-dmabuf -gamepadui"
 
