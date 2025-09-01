@@ -135,8 +135,11 @@ for i in ${CLIENT_CONFIG_DIR_USR}/${CLIENT} ${CLIENT_CONFIG_DIR_ETC}/${CLIENT} $
 done
 set +a
 
-# Source user configuration from ~/.config/environment.d
+# Source user configuration from /etc/environment.d and ~/.config/environment.d
 set -a
+for i in /etc/environment.d/*.conf; do
+	[[ -f "${i}" ]] && . "${i}"
+done
 for i in "${HOME}"/.config/environment.d/*.conf; do
 	[[ -f "${i}" ]] && . "${i}"
 done
@@ -219,6 +222,11 @@ if [ -z "$GAMESCOPECMD" ]; then
 		CUSTOM_REFRESH_RATES_OPTION="--custom-refresh-rates $CUSTOM_REFRESH_RATES"
 	fi
 
+	USE_ROTATION_SHADER_OPTION=""
+	if [ -n "$USE_ROTATION_SHADER" ] && gamescope_has_option "--use-rotation-shader"; then
+		USE_ROTATION_SHADER_OPTION="--use-rotation-shader $USE_ROTATION_SHADER"
+	fi
+
 	BACKEND_OPTION=""
 	# Check if an older GPU that needs the SDL workaround is in use.
 	if [ -n "$BACKEND" ] && gamescope_has_option "--backend"; then
@@ -245,6 +253,7 @@ if [ -z "$GAMESCOPECMD" ]; then
 		$ADAPTIVE_SYNC_OPTION \
 		$PANEL_TYPE_OPTION \
 		$CUSTOM_REFRESH_RATES_OPTION \
+		$USE_ROTATION_SHADER_OPTION \
 		$BACKEND_OPTION \
 		$HDR_OPTIONS \
 		--prefer-output $OUTPUT_CONNECTOR \
